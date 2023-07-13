@@ -36,7 +36,7 @@ const AccordionData: AccordionType[] = [
         open: false,
         children: [
           {
-            id: 11,
+            id: 7,
             title: 'Подзаголовок 1120, подзаголовка 806, заголовка 2',
             open: false,
             children: [],
@@ -46,22 +46,22 @@ const AccordionData: AccordionType[] = [
     ],
   },
   {
-    id: 7,
+    id: 8,
     title: 'Заголовок 3',
     open: false,
     children: [
       {
-        id: 8,
+        id: 9,
         title: 'Подзаголовок 505, заголовка 3',
         open: false,
         children: [
           {
-            id: 9,
+            id: 10,
             title: 'Подзаголовок 444, подзаголовка 505, заголовка 3',
             open: false,
             children: [
               {
-                id: 10,
+                id: 11,
                 title: 'Подзаголовок 333, подзаголовка 404, подзаголовка 505, заголовка 3',
                 open: false,
                 children: [],

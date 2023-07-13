@@ -1,7 +1,7 @@
 import React from 'react';
 import AccordionForm from './components/AccordionForm/AccordionForm';
 import AccordionData from './components/model/AccordionData';
-import './css/app.css';
+import './css/App.css';
 
 const App: React.FC = () => {
   return (

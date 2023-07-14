@@ -63,10 +63,10 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
     [accordionTree],
   );
 
-  const handleSearch = useCallback(
+  const searchAccordion = useCallback(
     (data: AccordionType[], search: string): AccordionType[] => {
       return data.map((accordion) => {
-        const childrenAccordion = handleSearch(accordion.children, search);
+        const childrenAccordion = searchAccordion(accordion.children, search);
         const isOpen =
           childrenAccordion.some((child) => child.open) ||
           childrenAccordion.some((child) => child.title.toLowerCase().includes(search.toLowerCase()));
@@ -80,13 +80,13 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
     [accordionTree],
   );
 
-  const handleSearching = useCallback(
+  const handleSearch = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setAccordionSearch(e.target.value);
       if (e.target.value == '') {
         return setAccordionTree(data);
       } else {
-        return setAccordionTree(handleSearch(accordionTree, e.target.value));
+        return setAccordionTree(searchAccordion(accordionTree, e.target.value));
       }
     },
     [accordionTree],
@@ -98,7 +98,7 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
         type="text"
         placeholder="Поиск..."
         value={accordionSearch}
-        onChange={handleSearching}
+        onChange={handleSearch}
         className="simple_input"
       />
       <AccordionDiv>

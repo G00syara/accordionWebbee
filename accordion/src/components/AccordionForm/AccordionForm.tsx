@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { AccordionType } from '../../Types';
 import AccordionItem from '../AccordionItem/AccordionItem';
 import './AccordionForm.css';
@@ -10,7 +10,6 @@ interface AccordionFormProps {
 const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
   const [accordionTree, setAccordionTree] = useState(data);
   const [accordionSearch, setAccordionSearch] = useState<string>('');
-  const openArray: number[] = [];
 
   const handleSwitcher = (id: AccordionType['id']) => {
     setAccordionTree((accordions) => {
@@ -37,41 +36,17 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
     });
   };
 
-  const handleSearch = (search: string) => {
-    const x: AccordionType[] = [];
-    setAccordionTree((data) => {
-      return data.map((accordion) => {
-        openArray.push(accordion.id);
-        if (childrenSearch(accordion.children, search, openArray) != x) {
-          return {
-            ...accordion,
-            open: !accordion.open ? !accordion.open : accordion.open,
-            children: childrenSearch(accordion.children, search, openArray),
-          };
-        } else {
-          return { ...accordion, open: accordion.open ? !accordion.open : accordion.open };
-        }
-      });
-    });
-  };
-
-  const childrenSearch = (
-    children: AccordionType['children'],
-    search: string,
-    openArray: number[],
-  ): AccordionType[] => {
-    return children.map((accordion) => {
-      console.log(openArray);
-      console.log(openArray.includes(accordion.id) + ' Render item ' + accordion.id);
-      if (accordion.title.toLowerCase().includes(search.toLowerCase()) || openArray.includes(accordion.id)) {
-        return {
-          ...accordion,
-          open: !accordion.open ? !accordion.open : accordion.open,
-          children: childrenSearch(accordion.children, search, openArray),
-        };
-      } else {
-        return { ...accordion, open: accordion.open ? !accordion.open : accordion.open };
-      }
+  const handleSearch = (data: AccordionType[], search: string): AccordionType[] => {
+    return data.map((accordion) => {
+      const childrenAccordion = handleSearch(accordion.children, search);
+      const isOpen =
+        childrenAccordion.some((child) => child.open) ||
+        childrenAccordion.some((child) => child.title.toLowerCase().includes(search.toLowerCase()));
+      return {
+        ...accordion,
+        open: isOpen,
+        children: childrenAccordion,
+      };
     });
   };
 
@@ -80,7 +55,7 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
     if (e.target.value == '') {
       return setAccordionTree(data);
     } else {
-      return handleSearch(e.target.value);
+      return setAccordionTree(handleSearch(accordionTree, e.target.value));
     }
   };
 

@@ -1,6 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
 import { AccordionType } from '../../Types';
-import './AccordionItem.css';
+
+const AccordionChildren = styled.div`
+  padding: 0 0 0 15px;
+`;
+
+const AccordionItemDiv = styled.div`
+  font-family: 'Righteous', cursive;
+  padding: 5px;
+  margin: 5px;
+  justify-content: space-between;
+  border-radius: 15px;
+  background-color: #ebebeb;
+  border: 1px solid black;
+`;
 
 interface AccordionItemListProps {
   data: AccordionType[];
@@ -9,22 +23,22 @@ interface AccordionItemListProps {
 
 const AccordionItem: React.FC<AccordionItemListProps> = ({ data, handleSwitcher }) => {
   return (
-    <div className="accordion_list">
+    <>
       {data.map((item) => (
         <div key={item.id}>
-          <div className="accordion_item" onClick={() => handleSwitcher(item.id)}>
-            <div className="">{item.open ? 'v' : '>'}</div>
-            <div className="">{item.title}</div>
-          </div>
+          <AccordionItemDiv onClick={() => handleSwitcher(item.id)}>
+            {item.open ? 'v' : '>'}
+            {' ' + item.title}
+          </AccordionItemDiv>
           {item.open && item.children && (
-            <div className="accordion_children">
+            <AccordionChildren>
               <AccordionItem data={item.children} handleSwitcher={handleSwitcher} />
-            </div>
+            </AccordionChildren>
           )}
         </div>
       ))}
-    </div>
+    </>
   );
 };
 
-export default AccordionItem;
+export default React.memo(AccordionItem);

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
+import AccordionList from '../AccordionList/AccordionList';
 import { AccordionType } from '../../Types';
-import AccordionItem from '../AccordionItem/AccordionItem';
 import styled from 'styled-components';
 
 const AccordionDiv = styled.div`
@@ -85,7 +85,7 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
     <>
       <Input type="text" placeholder="Поиск..." value={accordionSearch} onChange={handleSearch} />
       <AccordionDiv>
-        <AccordionItem data={accordionTree} handleSwitcher={handleSwitcher} />
+        <AccordionList data={accordionTree} handleSwitcher={handleSwitcher} />
       </AccordionDiv>
     </>
   );

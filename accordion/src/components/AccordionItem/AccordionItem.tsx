@@ -16,27 +16,24 @@ const AccordionItemDiv = styled.div`
   border: 1px solid black;
 `;
 
-interface AccordionItemListProps {
-  data: AccordionType[];
+interface AccordionItemProps {
+  accordion: AccordionType;
   handleSwitcher: (id: AccordionType['id']) => void;
+  children?: React.ReactNode;
 }
 
-const AccordionItem: React.FC<AccordionItemListProps> = ({ data, handleSwitcher }) => {
+const AccordionItem: React.FC<AccordionItemProps> = ({ accordion, handleSwitcher, children }) => {
+  console.log('Render item ' + accordion.id);
+
   return (
     <>
-      {data.map((item) => (
-        <div key={item.id}>
-          <AccordionItemDiv onClick={() => handleSwitcher(item.id)}>
-            {item.open ? 'v' : '>'}
-            {' ' + item.title}
-          </AccordionItemDiv>
-          {item.open && item.children && (
-            <AccordionChildren>
-              <AccordionItem data={item.children} handleSwitcher={handleSwitcher} />
-            </AccordionChildren>
-          )}
-        </div>
-      ))}
+      <div key={accordion.id}>
+        <AccordionItemDiv onClick={() => handleSwitcher(accordion.id)}>
+          {accordion.open ? 'v' : '>'}
+          {' ' + accordion.title}
+        </AccordionItemDiv>
+        {accordion.open && accordion.children && <AccordionChildren>{children}</AccordionChildren>}
+      </div>
     </>
   );
 };

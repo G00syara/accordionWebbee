@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { AccordionType } from '../../Types';
 
@@ -22,6 +22,28 @@ interface AccordionItemProps {
   children?: React.ReactNode;
 }
 
+const compareChildren = (prevChildren: AccordionType[], nextChildren: AccordionType[]) => {
+  if (prevChildren.length !== nextChildren.length) {
+    return false; // Если количество дочерних элементов изменилось, перерисовываем компонент
+  }
+
+  for (let i = 0; i < prevChildren.length; i++) {
+    if (prevChildren[i].open !== nextChildren[i].open) {
+      return false; // Если свойство open любого из дочерних элементов изменилось, перерисовываем компонент
+    }
+
+    if (prevChildren[i].children.length > 0 && nextChildren[i].children.length > 0) {
+      const areNestedChildrenEqual = compareChildren(prevChildren[i].children, nextChildren[i].children);
+
+      if (!areNestedChildrenEqual) {
+        return false; // Если какой-либо из вложенных дочерних элементов изменился, перерисовываем компонент
+      }
+    }
+  }
+
+  return true; // Если изменений в дочерних элементах или вложенных дочерних элементах не обнаружено, не перерисовываем компонент
+};
+
 const AccordionItem: React.FC<AccordionItemProps> = ({ accordion, handleSwitcher, children }) => {
   console.log('Render item ' + accordion.id);
 
@@ -38,4 +60,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ accordion, handleSwitcher
   );
 };
 
-export default React.memo(AccordionItem);
+export default React.memo(AccordionItem, (prevProps, nextProps) => {
+  if (prevProps.accordion.open !== nextProps.accordion.open) {
+    return false;
+  }
+
+  return compareChildren(prevProps.accordion.children, nextProps.accordion.children);
+});

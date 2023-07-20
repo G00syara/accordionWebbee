@@ -32,7 +32,7 @@ const compareChildren = (prevChildren: AccordionType[], nextChildren: AccordionT
       return false; // Если свойство open любого из дочерних элементов изменилось, перерисовываем компонент
     }
 
-    if (prevChildren[i].children.length > 0 && nextChildren[i].children.length > 0) {
+    if (prevChildren[i].children.length && nextChildren[i].children.length) {
       const areNestedChildrenEqual = compareChildren(prevChildren[i].children, nextChildren[i].children);
 
       if (!areNestedChildrenEqual) {
@@ -61,7 +61,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ accordion, handleSwitcher
 };
 
 export default React.memo(AccordionItem, (prevProps, nextProps) => {
-  if (prevProps.accordion.open !== nextProps.accordion.open) {
+  if (
+    prevProps.accordion.open !== nextProps.accordion.open ||
+    prevProps.accordion.title !== nextProps.accordion.title ||
+    prevProps.accordion.id !== nextProps.accordion.id
+  ) {
     return false;
   }
 

@@ -31,32 +31,21 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
   const [accordionSearch, setAccordionSearch] = useState<string>('');
 
   const handleSwitcher = useCallback((id: AccordionType['id']) => {
-    setAccordionTree((accordions) => {
-      return accordions.map((accordion) => {
-        if (accordion.id === id) {
-          return { ...accordion, open: !accordion.open };
-        }
-        if (accordion.children) {
-          return { ...accordion, children: childrenSwitcher(accordion.children, id) };
-        }
-        return accordion;
-      });
+    setAccordionTree((data) => {
+      const childrenSwitcher = (children: AccordionType['children']): AccordionType[] => {
+        return children.map((item) => {
+          if (item.id === id) {
+            return { ...item, open: !item.open };
+          }
+          if (item.children) {
+            return { ...item, children: childrenSwitcher(item.children) };
+          }
+          return item;
+        });
+      };
+      return childrenSwitcher(data);
     });
   }, []);
-
-  const childrenSwitcher = useCallback(
-    (children: AccordionType['children'], id: AccordionType['id']): AccordionType[] => {
-      return children.map((accordion) => {
-        if (accordion.id === id) {
-          return { ...accordion, open: !accordion.open };
-        } else if (accordion.children) {
-          return { ...accordion, children: childrenSwitcher(accordion.children, id) };
-        }
-        return accordion;
-      });
-    },
-    [],
-  );
 
   const searchAccordion = useCallback((data: AccordionType[], search: string): AccordionType[] => {
     return data.map((accordion) => {
@@ -72,14 +61,17 @@ const AccordionForm: React.FC<AccordionFormProps> = ({ data }) => {
     });
   }, []);
 
-  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setAccordionSearch(e.target.value);
-    if (e.target.value === '') {
-      return setAccordionTree(data);
-    } else {
-      return setAccordionTree(searchAccordion(accordionTree, e.target.value));
-    }
-  }, []);
+  const handleSearch = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setAccordionSearch(e.target.value);
+      if (e.target.value === '') {
+        return setAccordionTree(data);
+      } else {
+        return setAccordionTree(searchAccordion(accordionTree, e.target.value));
+      }
+    },
+    [data, searchAccordion, accordionTree],
+  );
 
   return (
     <>

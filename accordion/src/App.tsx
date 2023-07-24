@@ -14,7 +14,6 @@ const Wrapper = styled.div`
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 0 #3c93d5;
   padding: 0 20px 20px 20px;
   border: 1px solid black;
   box-shadow:
@@ -34,7 +33,7 @@ const App: React.FC = () => {
   return (
     <Wrapper>
       <AppContainer>
-        <H1> Аккордеоны </H1>
+        <H1>Аккордеоны</H1>
         <AccordionForm data={AccordionData} />
       </AppContainer>
     </Wrapper>

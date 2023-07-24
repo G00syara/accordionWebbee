@@ -1,10 +1,6 @@
-import React, { memo, useMemo, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { AccordionType } from '../../Types';
-
-const AccordionChildren = styled.div`
-  padding: 0 0 0 15px;
-`;
 
 const AccordionItemDiv = styled.div`
   font-family: 'Righteous', cursive;
@@ -48,15 +44,13 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ accordion, handleSwitcher
   console.log('Render item ' + accordion.id);
 
   return (
-    <>
-      <div key={accordion.id}>
-        <AccordionItemDiv onClick={() => handleSwitcher(accordion.id)}>
-          {accordion.open ? 'v' : '>'}
-          {' ' + accordion.title}
-        </AccordionItemDiv>
-        {accordion.open && accordion.children && <AccordionChildren>{children}</AccordionChildren>}
-      </div>
-    </>
+    <div>
+      <AccordionItemDiv onClick={() => handleSwitcher(accordion.id)}>
+        {accordion.open ? 'v' : '>'}
+        {' ' + accordion.title}
+      </AccordionItemDiv>
+      {accordion.open && accordion.children && <>{children}</>}
+    </div>
   );
 };
 
